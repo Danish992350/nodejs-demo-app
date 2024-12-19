@@ -1,4 +1,4 @@
-name: ECS Deployment - Development Longtail Application
+name: NodeJS Deployment - Development Application
 
 on:
   # Trigger the workflow when changes are pushed to the specified branch
