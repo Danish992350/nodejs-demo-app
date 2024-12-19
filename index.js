@@ -1,6 +1,8 @@
 import { createRequire } from "module";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -22,8 +24,8 @@ import { publicIp, publicIpv4, publicIpv6 } from 'public-ip';
 
 
 // For mongodb
-const  mongoUrl= 'mongodb://3.81.12.106:27017/'// Replace with mongodb server IP
-const client = new MongoClient(mongoUrl); 
+const mongoUrl = process.env.MONGO_URL || 'mongodb://admin:admin123@mongodb:27017';
+const client = new MongoClient(mongoUrl);
 
 const db = client.db('mydatabase'); // Name of your database
 const collection = db.collection('mycollection'); // Name of your collection

@@ -1,0 +1,51 @@
+name: ECS Deployment - Development Longtail Application
+
+on:
+  # Trigger the workflow when changes are pushed to the specified branch
+  push:
+    branches:
+      - main
+
+env:
+  # Set environment variables for AWS region, ECR repository, ECS cluster, etc.
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: development/nodejs
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      packages: 'write'
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: true
+
+      # Build the Docker image with a unique tag based on commit hash and timestamp
+      - name: Build, tag, and push Docker image to ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }} # Add commit hash for unique tag
+          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        run: |
+          docker build -t $IMAGE_URI . # Build and tag the image
+          docker push $IMAGE_URI # Push the image to ECR
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
