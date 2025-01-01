@@ -8,7 +8,7 @@ image:
   repository: 396913709751.dkr.ecr.us-east-1.amazonaws.com/development/nodejs
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "da635ec6fb68b529ec5151163dfc667189418302"
+  tag: "1.0.2"
 
 imagePullSecrets:
   - name: ecr-secret
@@ -82,3 +82,4 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+

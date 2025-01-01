@@ -24,10 +24,10 @@ import { publicIp, publicIpv4, publicIpv6 } from 'public-ip';
 
 
 // For mongodb
-const mongoUrl = process.env.MONGO_URL || 'mongodb://admin:admin123@mongodb:27017';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://root:nwCUkUMWU5@my-mongodb.mongo.svc.cluster.local:27017';
 const client = new MongoClient(mongoUrl);
 
-const db = client.db('mydatabase'); // Name of your database
+const db = client.db('admin'); // Name of your database
 const collection = db.collection('mycollection'); // Name of your collection
 
 // Database connection function
